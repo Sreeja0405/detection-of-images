@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0A0F1F;
+        }
+
+        .container {
+            padding: 20px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            background-color: #111827;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #4B5563;
+            border-radius: 10px;
+            background: #1E293B;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="file"]:hover {
+            border-color: #758290;
+            background: #2A3B4D;
+        }
+
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #758290;
+            box-shadow: 0 0 8px #758290;
+            transform: scale(1.05);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #758290;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5A6A7B;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Your File</h2>
+        <input type="file" name="file" id="file" title="Select a file to upload">
+        <button onclick="handleUpload()">Upload</button>
+    </div>
+    <script>
+        function sendImageToBackend(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+    
+            fetch('http://127.0.0.1:4000/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Redirect to result page with result data
+                const result = data.result;
+                window.location.href = `result.html?result=${result}&image=${encodeURIComponent(file.name)}`;
+            })
+            .catch(err => console.error('Error:', err));
+        }
+
+        function handleUpload() {
+            const fileInput = document.querySelector('input[type="file"]');
+            const file = fileInput.files[0];
+            if (file) {
+                sendImageToBackend(file);
+            } else {
+                alert('Please select a file first.');
+            }
+        }
+    </script>
+</body>
+</html>

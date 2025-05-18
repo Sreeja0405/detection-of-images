@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0A0F1F;
+        }
+
+        .container {
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #111827;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .input-box {
+            width: 100%;
+            position: relative;
+            margin-bottom: 15px; /* Added spacing between inputs */
+        }
+
+        input {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            border: 1px solid #4B5563;
+            border-radius: 10px;
+            background: #1E293B;
+            color: white;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #758290;
+            box-shadow: 0 0 8px #758290;
+            transform: scale(1.05);
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            min-height: 18px; /* Prevent shifting */
+            display: none;
+            margin-top: 5px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: white;
+            font-size: 18px; /* Bigger icon */
+            padding: 5px; /* More clickable */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #758290;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5A6A7B;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease-in-out; /* Smoother click */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+
+        <div class="input-box">
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        <p class="error" id="emailError">Please enter a valid email!</p>
+
+        <div class="input-box">
+            <input type="password" id="password" placeholder="Enter your password">
+            <span class="password-toggle" onclick="togglePassword()">👁</span>
+        </div>
+        <p class="error" id="passwordError">Password must be at least 8 characters, with a number and a special character!</p>
+
+        <button onclick="validateLogin()">Login</button>
+    </div>
+
+    <script>
+        function validateEmail(email) {
+            let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        }
+
+        function validatePassword(password) {
+            let passwordPattern = /^(?=.*[0-9])(?=.*[\W]).{8,}$/;
+            return passwordPattern.test(password);
+        }
+
+        function togglePassword() {
+            let passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+
+        function validateLogin() {
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let emailError = document.getElementById("emailError");
+            let passwordError = document.getElementById("passwordError");
+
+            let valid = true;
+
+            if (!validateEmail(email)) {
+                emailError.style.display = "block";
+                valid = false;
+            } else {
+                emailError.style.display = "none";
+            }
+
+            if (!validatePassword(password)) {
+                passwordError.style.display = "block";
+                valid = false;
+            } else {
+                passwordError.style.display = "none";
+            }
+
+            if (valid) {
+                window.location.href = "file.html"; // Redirect after login
+            }
+        }
+
+        // Hide error messages while typing
+        document.getElementById("email").addEventListener("input", () => {
+            document.getElementById("emailError").style.display = "none";
+        });
+
+        document.getElementById("password").addEventListener("input", () => {
+            document.getElementById("passwordError").style.display = "none";
+        });
+    </script>
+</body>
+</html>
