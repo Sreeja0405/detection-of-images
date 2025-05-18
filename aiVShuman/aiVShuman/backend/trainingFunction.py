@@ -10,8 +10,8 @@ from skimage.measure import shannon_entropy
 import cv2
 
 # Define the folder paths
-ai_folder = 'C:/Users/kurapati sai sreeja/OneDrive/Desktop/aiVShuman2/aiVShuman/aiVShuman/backend/ai_folder'
-real_folder = 'C:/Users/kurapati sai sreeja/OneDrive/Desktop/aiVShuman2/aiVShuman/aiVShuman/backend/real_folder'
+ai_folder = 'C:/Users/kurapati sai sreeja/OneDrive/Desktop/aiVShuman10/aiVShuman/aiVShuman/backend/ai_folder'
+real_folder = 'C:/Users/kurapati sai sreeja/OneDrive/Desktop/aiVShuman10/aiVShuman/aiVShuman/backend/real_folder'
 
 # Function to extract features from an image
 def extract_features(image_path):

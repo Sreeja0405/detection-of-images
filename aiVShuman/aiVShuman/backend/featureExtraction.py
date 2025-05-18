@@ -57,6 +57,6 @@ def extract_features(image_path, num_bins=20):
 
 # Example Usage
 # Extract features for an example image
-image_path = r"C:\Users\kurapati sai sreeja\OneDrive\Desktop\aiVShuman2\aiVShuman\aiVShuman\backend\uploads\ai image3.jpg"
+image_path = r"C:\Users\kurapati sai sreeja\OneDrive\Desktop\aiVShuman10\aiVShuman\aiVShuman\backend\uploads\ai image3.jpg"
 features = extract_features(image_path)
 print(features)
