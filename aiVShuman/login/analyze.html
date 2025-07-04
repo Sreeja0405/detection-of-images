@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI vs Human Image Detector</title>
+  <style>
+    :root {
+      --primary-color: #3a7bd5;
+      --primary-hover: #0072ff;
+      --box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(to bottom right, #000428, #004e92);
+      position: relative;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .neon-wrapper {
+      position: relative;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      background: rgba(255,255,255,0.05);
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    label[for="imageInput"] {
+      padding: 14px 24px;
+      background: #1a73e8;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    #imagePreview {
+      display: none;
+      max-width: 80%;
+      height: auto;
+      max-height: 200px;
+      margin: 12px auto;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #00c9ff;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 16px;
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      background-color: #00b5e6;
+    }
+
+    .card, #result {
+      margin-top: 20px;
+    }
+
+    .animated-border {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      border-radius: 40px;
+      z-index: 0;
+    }
+
+    .line {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
+      opacity: 0.6;
+      background: radial-gradient(circle at 30% 70%, #ff4ecd, transparent 70%),
+                  radial-gradient(circle at 70% 30%, #00f5ff, transparent 70%);
+    }
+
+    .line:nth-child(2) {
+      animation-duration: 25s;
+      background: radial-gradient(circle at 20% 80%, #ffae00, transparent 70%),
+                  radial-gradient(circle at 80% 20%, #00ffc8, transparent 70%);
+    }
+
+    .line:nth-child(3) {
+      animation-duration: 35s;
+      background: radial-gradient(circle at 50% 50%, #b983ff, transparent 70%);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1.1); }
+    }
+
+    .prediction {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+    .prediction.ai { color: #f00; }
+    .prediction.real { color: #0f0; }
+    .confidence { font-size: 16px; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="neon-wrapper">
+      <h1>AI vs Human Image Detector</h1>
+      <form id="uploadForm" action="/analyze" method="POST" enctype="multipart/form-data">
+        <label for="imageInput" id="fileLabel"><strong>Tap or Drag to upload image</strong></label>
+        <input id="imageInput" type="file" name="image" accept="image/*" required />
+        <img id="imagePreview" alt="Preview"/>
+        <button type="submit">Analyze Image</button>
+      </form>
+
+      <div id="result" style="display:none;">
+        <div class="prediction" id="predictionText"></div>
+        <div class="confidence" id="confidenceText"></div>
+        <button id="resetButton">Upload Another Image</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="animated-border">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const fileLabel = document.getElementById('fileLabel');
+    const imgPreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', () => {
+      const f = imageInput.files[0];
+      fileLabel.innerHTML = `<strong>${f ? f.name : 'Tap or Drag to upload image'}</strong>`;
+      if (f) {
+        imgPreview.src = URL.createObjectURL(f);
+        imgPreview.style.display = 'block';
+      }
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const pred = params.get('prediction'), ai = params.get('ai_confidence'), real = params.get('real_confidence');
+
+    if (pred && ai && real) {
+      document.getElementById('uploadForm').style.display = 'none';
+      const resDiv = document.getElementById('result');
+      const txt = document.getElementById('predictionText');
+      const conf = document.getElementById('confidenceText');
+      const isAI = pred.toLowerCase() === 'ai';
+
+      txt.textContent = `Result: ${isAI ? '🧠 AI-Generated Image' : '📷 Real Image'}`;
+      txt.classList.add(isAI ? 'ai' : 'real');
+      conf.innerHTML = `<strong>AI Confidence:</strong> ${parseFloat(ai).toFixed(2)}%<br><strong>Real Confidence:</strong> ${parseFloat(real).toFixed(2)}%`;
+      resDiv.style.display = 'block';
+    }
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('uploadForm').style.display = 'block';
+      imgPreview.style.display = 'none';
+      imgPreview.src = '';
+      imageInput.value = '';
+      fileLabel.innerHTML = `<strong>Tap or Drag to upload image</strong>`;
+    });
+  </script>
+</body>
+</html>
