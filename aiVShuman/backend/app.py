@@ -4,7 +4,7 @@ import joblib
 import numpy as np
 import os
 from werkzeug.utils import secure_filename
-from featureExtraction import extract_features
+from aiVShuman.featureExtraction import extract_features
 
 app = Flask(__name__)
 CORS(app)  # Allows frontend to talk to backend
