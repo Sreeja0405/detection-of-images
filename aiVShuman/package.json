@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: ai-image-detector
+    env: node
+    rootDir: backend  # 👈 tell Render to start from /backend
+    buildCommand: "npm install"
+    startCommand: "node server.js"
