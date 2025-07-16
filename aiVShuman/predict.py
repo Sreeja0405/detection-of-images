@@ -8,6 +8,7 @@ from scipy.stats import skew, kurtosis
 from PIL import Image, ExifTags
 import sys
 import os
+from aiVShuman.featureExtraction import extract_features, extract_metadata_features
 
 # ✅ Extract metadata features
 def extract_metadata_features(image_path):

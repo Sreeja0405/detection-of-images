@@ -4,6 +4,7 @@ from skimage import io, color
 from skimage.transform import resize
 from skimage.feature import hog
 from PIL import Image, ExifTags
+from scipy.stats import skew, kurtosis
 
 def extract_metadata_features(image_path):
     try:
@@ -39,6 +40,8 @@ def extract_features(image_path, num_bins=20):
     fft_mean = np.mean(log_F)
     fft_std = np.std(log_F)
     fft_entropy = -np.sum(log_F * np.log(log_F + 1e-10))
+    fft_skewness = skew(log_F.flatten())
+    fft_kurtosis = kurtosis(log_F.flatten())
 
     # Histogram from FFT
     hist_vals, _ = np.histogram(log_F.flatten(), bins=num_bins, density=True)

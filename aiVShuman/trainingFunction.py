@@ -25,7 +25,7 @@ warnings.filterwarnings("ignore")
 # 📁 Folder paths
 AI_FOLDER = 'C:/Users/kurapati sai sreeja/Desktop/aiVShuman40/aiVShuman/backend/ai_folder'
 REAL_FOLDER = 'C:/Users/kurapati sai sreeja/Desktop/aiVShuman40/aiVShuman/backend/real_folder'
-SUPPORTED_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.bmp', '.tiff')
+SUPPORTED_EXTENSIONS = ('.jpg', '.jpeg', '.png')
 
 # 🧠 Load ResNet50 for deep features
 base_model = ResNet50(weights='imagenet', include_top=False, pooling='avg')
